@@ -5,6 +5,7 @@ Eclipse plugin that helps with the development of Spring Boot. Some capabilities
  - Warns about `@Configuration` classes that use field injection
  - Warns about unnecessary use of `@Autowired` on classes with a single constructor
  - Quick fix for converting a configuration class from constructor injection to field injection
+ - Reports an error if a `FailureAnalyzer` is not listed in `META-INF/spring.factories`
 
 ### Building
 

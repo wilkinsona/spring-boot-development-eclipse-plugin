@@ -9,6 +9,7 @@
 
 package io.spring.boot.development.eclipse.visitors;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jdt.core.dom.Annotation;
@@ -16,6 +17,7 @@ import org.eclipse.jdt.core.dom.BodyDeclaration;
 import org.eclipse.jdt.core.dom.IExtendedModifier;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.Name;
+import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 /**
  * Utility methods for working with JDT's AST.
@@ -49,6 +51,29 @@ public final class AstUtils {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * Gets the fully qualified name of all of the interfaces and their super-interfaces
+	 * implemented by the given {@code type} and its superclasses.
+	 *
+	 * @param type the type
+	 * @return the fully qualified interface names
+	 */
+	public static List<String> getImplementedInterfaces(TypeDeclaration type) {
+		return getImplementedInterfaces(type.resolveBinding());
+	}
+
+	private static List<String> getImplementedInterfaces(ITypeBinding type) {
+		List<String> implementedInterfaces = new ArrayList<String>();
+		for (ITypeBinding iface : type.getInterfaces()) {
+			implementedInterfaces.add(iface.getQualifiedName());
+			implementedInterfaces.addAll(getImplementedInterfaces(iface));
+		}
+		if (type.getSuperclass() != null) {
+			implementedInterfaces.addAll(getImplementedInterfaces(type.getSuperclass()));
+		}
+		return implementedInterfaces;
 	}
 
 	private static String findQualifiedTypeName(Annotation annotation) {

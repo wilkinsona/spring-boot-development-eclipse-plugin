@@ -15,7 +15,10 @@ public enum Problem {
 			"@Configuration classes should use constructor injection"),
 
 	AUTOWIRED_SINGLE_CONSTRUCTOR(1,
-			"@Autowired is unnecessary as the class has a single constructor");
+			"@Autowired is unnecessary as the class has a single constructor"),
+
+	FAILURE_ANALYZER_NOT_IN_SPRING_FACTORIES(2,
+			"Implements FailureAnalyzer but is not listed in spring.factories");
 
 	private final int id;
 

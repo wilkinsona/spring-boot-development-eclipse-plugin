@@ -33,9 +33,18 @@ public class StandardProblemReporter implements ProblemReporter {
 
 	@Override
 	public void warning(Problem problem, ASTNode node) {
+		report(problem, IMarker.SEVERITY_WARNING, node);
+	}
+
+	@Override
+	public void error(Problem problem, ASTNode node) {
+		report(problem, IMarker.SEVERITY_ERROR, node);
+	}
+
+	private void report(Problem problem, int severity, ASTNode node) {
 		try {
 			IMarker marker = this.resource.createMarker(MARKER_TYPE);
-			marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_WARNING);
+			marker.setAttribute(IMarker.SEVERITY, severity);
 			marker.setAttribute(IMarker.MESSAGE, problem.getMessage());
 			int startPosition = node.getStartPosition();
 			marker.setAttribute(IMarker.CHAR_START, startPosition);

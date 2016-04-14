@@ -27,4 +27,13 @@ public interface ProblemReporter {
 	 */
 	void warning(Problem problem, ASTNode node);
 
+	/**
+	 * Reports an error for the given {@code problem}, associating it with the given
+	 * {@code node}.
+	 *
+	 * @param problem the problem
+	 * @param node the node
+	 */
+	void error(Problem problem, ASTNode node);
+
 }
