@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+	<extension
+			id="builder"
+			name="Spring Boot Development Builder"
+			point="org.eclipse.core.resources.builders">
+		<builder hasNature="true">
+			<run class="io.spring.boot.development.eclipse.SpringBootDevelopmentBuilder"/>
+		</builder>
+	</extension>
+	<extension
+			id="nature"
+			name="Spring Boot Development Nature"
+			point="org.eclipse.core.resources.natures">
+		<runtime>
+			<run class="io.spring.boot.development.eclipse.SpringBootDevelopmentNature"/>
+		</runtime>
+		<builder id="io.spring.boot.development.eclipse.builder"/>
+	</extension>
+	<extension
+			point="org.eclipse.ui.commands">
+		<category
+				name="Spring Boot Development Nature commands"
+				id="io.spring.boot.development.eclipse.nature.category">
+		</category>
+		<command
+				name="Enable Spring Boot Development Nature"
+				defaultHandler="io.spring.boot.development.eclipse.ui.EnableSpringBootDevelopmentNatureHandler"
+				categoryId="io.spring.boot.development.eclipse.nature.category"
+				id="io.spring.boot.development.eclipse.enableSpringBootDevelopmentNature">
+		</command>
+		<command
+				name="Disable Spring Boot Development Nature"
+				defaultHandler="io.spring.boot.development.eclipse.ui.DisableSpringBootDevelopmentNatureHandler"
+				categoryId="io.spring.boot.development.eclipse.nature.category"
+				id="io.spring.boot.development.eclipse.disableSpringBootDevelopmentNature">
+		</command>
+	</extension>
+	<extension
+			point="org.eclipse.ui.menus">
+		<menuContribution
+				locationURI="popup:org.eclipse.ui.projectConfigure?after=additions">
+			<command
+					commandId="io.spring.boot.development.eclipse.disableSpringBootDevelopmentNature"
+					label="Disable Spring Boot Development builder"
+					style="push">
+				<visibleWhen checkEnabled="false">
+					<with variable="selection">
+						<iterate>
+							<adapt type="org.eclipse.core.resources.IProject">
+								<test value="io.spring.boot.development.eclipse.nature"
+										property="org.eclipse.core.resources.projectNature"/>
+							</adapt>
+						</iterate>
+					</with>
+				</visibleWhen>
+			</command>
+			<command
+					commandId="io.spring.boot.development.eclipse.enableSpringBootDevelopmentNature"
+					label="Enable Spring Boot Development builder"
+					style="push">
+				<visibleWhen checkEnabled="false">
+					<with variable="selection">
+						<iterate>
+							<adapt type="org.eclipse.core.resources.IProject">
+								<not>
+									<test value="io.spring.boot.development.eclipse.nature"
+											property="org.eclipse.core.resources.projectNature">
+									</test>
+								</not>
+							</adapt>
+						</iterate>
+					</with>
+				</visibleWhen>
+			</command>
+		</menuContribution>
+	</extension>
+	<extension
+			id="problem"
+			name="Spring Boot Development Problem"
+			point="org.eclipse.core.resources.markers">
+		<super type="org.eclipse.core.resources.problemmarker"/>
+		<persistent value="true"/>
+	</extension>
+ 	<extension
+       		point="org.eclipse.ui.ide.markerResolution">
+       	<markerResolutionGenerator
+       			class="io.spring.boot.development.eclipse.ui.SpringBootMarkerResolutionGenerator"
+       			markerType="io.spring.boot.development.eclipse.problem"/>
+ 	</extension>
+</plugin>

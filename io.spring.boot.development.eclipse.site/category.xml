@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+	<description>Spring Boot Development support for Eclipse</description>
+	<feature url="features/io.spring.boot.development.eclipse.feature_1.0.0.qualifier.jar" id="io.spring.boot.development.eclipse.feature" version="1.0.0.qualifier">
+	<category name="io.spring.boot.development.eclipse"/>
+	</feature>
+	<category-def name="io.spring.boot.development.eclipse" label="Spring Boot Development"/>
+</site>
