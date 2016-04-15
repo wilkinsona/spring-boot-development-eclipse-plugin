@@ -13,10 +13,13 @@ The plugin and its update site are built with Maven:
 
 ``` $ mvn clean package ```
 
-### Installation
+### Using
 
 Once built, the plugin can be installed by using `io.spring.boot.development.eclipse.site.zip`
 found in `io.spring.boot.development.eclipse.site/target/` as an archive update site.
+
+The plugin is enabled on a per-project basis. To enable it, select the project(s), right-click
+and then click `Configure -> Enable Spring Boot Development builder`.
 
 ### License
 
