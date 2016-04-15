@@ -9,6 +9,8 @@
 
 package io.spring.boot.development.eclipse.visitors;
 
+import java.lang.reflect.Modifier;
+
 import io.spring.boot.development.eclipse.Problem;
 import io.spring.boot.development.eclipse.ProblemReporter;
 import org.eclipse.core.resources.IProject;
@@ -51,8 +53,9 @@ class FailureAnalyzerSpringFactoriesVisitor extends ASTVisitor {
 	}
 
 	private boolean isFailureAnalyzer(TypeDeclaration type) {
-		return !type.isInterface() && AstUtils.getImplementedInterfaces(type)
-				.contains(CLASS_NAME_FAILURE_ANALYZER);
+		return !type.isInterface() && !Modifier.isAbstract(type.getModifiers())
+				&& AstUtils.getImplementedInterfaces(type)
+						.contains(CLASS_NAME_FAILURE_ANALYZER);
 	}
 
 }
