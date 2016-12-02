@@ -32,8 +32,9 @@ final class ConfigurationClassConstructorInjectionVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(TypeDeclaration type) {
-		if (AstUtils.hasAnnotation(type,
-				"org.springframework.context.annotation.Configuration")) {
+		if (JavaElementUtils.isInSrcMainJava(type.resolveBinding().getJavaElement())
+				&& AstUtils.hasAnnotation(type,
+						"org.springframework.context.annotation.Configuration")) {
 			analyzeFields(type.getFields());
 		}
 		return true;

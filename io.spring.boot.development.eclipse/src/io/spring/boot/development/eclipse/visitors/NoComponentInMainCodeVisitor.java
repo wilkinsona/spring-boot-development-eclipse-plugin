@@ -18,8 +18,6 @@ package io.spring.boot.development.eclipse.visitors;
 
 import io.spring.boot.development.eclipse.Problem;
 import io.spring.boot.development.eclipse.ProblemReporter;
-import org.eclipse.jdt.core.IJavaElement;
-import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
@@ -38,7 +36,9 @@ class NoComponentInMainCodeVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(TypeDeclaration typeDeclaration) {
-		if (isInSpringBootPackage(typeDeclaration) && isInSrcMainJava(typeDeclaration)
+		if (isInSpringBootPackage(typeDeclaration)
+				&& JavaElementUtils.isInSrcMainJava(
+						typeDeclaration.resolveBinding().getJavaElement())
 				&& isComponent(typeDeclaration)) {
 			this.problemReporter.warning(Problem.MAIN_CODE_COMPONENT, typeDeclaration);
 		}
@@ -53,18 +53,6 @@ class NoComponentInMainCodeVisitor extends ASTVisitor {
 	private boolean isComponent(TypeDeclaration typeDeclaration) {
 		return AstUtils.hasAnnotation(typeDeclaration,
 				"org.springframework.stereotype.Component");
-	}
-
-	private boolean isInSrcMainJava(TypeDeclaration typeDeclaration) {
-		IJavaElement javaElement = typeDeclaration.resolveBinding().getJavaElement();
-		while (javaElement != null) {
-			if (javaElement instanceof IPackageFragmentRoot) {
-				return ((IPackageFragmentRoot) javaElement).getPath().toFile()
-						.getAbsolutePath().endsWith("/src/main/java");
-			}
-			javaElement = javaElement.getParent();
-		}
-		return false;
 	}
 
 }

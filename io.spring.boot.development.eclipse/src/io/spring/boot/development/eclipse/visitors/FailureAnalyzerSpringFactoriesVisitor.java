@@ -39,7 +39,10 @@ class FailureAnalyzerSpringFactoriesVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(TypeDeclaration type) {
-		if (isFailureAnalyzer(type) && !isListedInSpringFactories(type)) {
+		if (isFailureAnalyzer(type)
+				&& JavaElementUtils
+						.isInSrcMainJava(type.resolveBinding().getJavaElement())
+				&& !isListedInSpringFactories(type)) {
 			this.problemReporter.error(Problem.FAILURE_ANALYZER_NOT_IN_SPRING_FACTORIES,
 					type);
 		}
