@@ -23,12 +23,12 @@ public class AstVisitors implements Iterable<ASTVisitor> {
 
 	public AstVisitors(IResource resource) {
 		StandardProblemReporter problemReporter = new StandardProblemReporter(resource);
-		this.visitors = Arrays
-				.asList(new NoAutowiredWithSingleConstructorVisitor(problemReporter),
-						new ConfigurationClassConstructorInjectionVisitor(
-								problemReporter),
-						new FailureAnalyzerSpringFactoriesVisitor(problemReporter,
-								resource.getProject()));
+		this.visitors = Arrays.asList(
+				new NoAutowiredWithSingleConstructorVisitor(problemReporter),
+				new ConfigurationClassConstructorInjectionVisitor(problemReporter),
+				new FailureAnalyzerSpringFactoriesVisitor(problemReporter,
+						resource.getProject()),
+				new NoComponentInMainCodeVisitor(problemReporter));
 	}
 
 	@Override

@@ -18,7 +18,9 @@ public enum Problem {
 			"@Autowired is unnecessary as the class has a single constructor"),
 
 	FAILURE_ANALYZER_NOT_IN_SPRING_FACTORIES(2,
-			"Implements FailureAnalyzer but is not listed in spring.factories");
+			"Implements FailureAnalyzer but is not listed in spring.factories"),
+
+	MAIN_CODE_COMPONENT(3, "@Component should not be used in main code");
 
 	private final int id;
 
