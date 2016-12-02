@@ -84,7 +84,6 @@ public final class AstUtils {
 	}
 
 	private static boolean hasAnnotation(ITypeBinding typeBinding, String className) {
-		System.out.println(typeBinding.getQualifiedName());
 		return hasAnnotation(typeBinding, className, new HashSet<String>());
 	}
 

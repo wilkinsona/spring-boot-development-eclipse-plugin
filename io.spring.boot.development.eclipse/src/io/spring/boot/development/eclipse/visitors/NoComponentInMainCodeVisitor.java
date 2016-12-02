@@ -51,8 +51,9 @@ class NoComponentInMainCodeVisitor extends ASTVisitor {
 	}
 
 	private boolean isComponent(TypeDeclaration typeDeclaration) {
-		return AstUtils.hasAnnotation(typeDeclaration,
-				"org.springframework.stereotype.Component");
+		return AstUtils.findAnnotation(typeDeclaration,
+				"org.springframework.stereotype.Component") != null;
+
 	}
 
 }
