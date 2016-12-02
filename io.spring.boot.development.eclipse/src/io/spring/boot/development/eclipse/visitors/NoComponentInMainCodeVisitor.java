@@ -42,7 +42,7 @@ class NoComponentInMainCodeVisitor extends ASTVisitor {
 				&& isComponent(typeDeclaration)) {
 			this.problemReporter.warning(Problem.MAIN_CODE_COMPONENT, typeDeclaration);
 		}
-		return false;
+		return true;
 	}
 
 	private boolean isInSpringBootPackage(TypeDeclaration typeDeclaration) {
