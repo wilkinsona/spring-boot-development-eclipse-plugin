@@ -10,10 +10,13 @@
 package io.spring.boot.development.eclipse.visitors;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.eclipse.jdt.core.dom.Annotation;
 import org.eclipse.jdt.core.dom.BodyDeclaration;
+import org.eclipse.jdt.core.dom.IAnnotationBinding;
 import org.eclipse.jdt.core.dom.IExtendedModifier;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.Name;
@@ -51,6 +54,55 @@ public final class AstUtils {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * Returns true if the given {@code bodyDeclaration} is annotated or meta-annotated
+	 * with an annotation with the given {@code className}.
+	 *
+	 * @param bodyDeclaration the body declaration to examine
+	 * @param className the class name of the annotation to look for
+	 *
+	 * @return {@code true} if the annotation is present, otherwise false.
+	 */
+	@SuppressWarnings("unchecked")
+	public static boolean hasAnnotation(BodyDeclaration bodyDeclaration,
+			String className) {
+		for (IExtendedModifier modifier : (List<IExtendedModifier>) bodyDeclaration
+				.modifiers()) {
+			if (modifier.isAnnotation()) {
+				Annotation annotation = ((Annotation) modifier);
+				if (className.equals(findQualifiedTypeName(annotation))) {
+					return true;
+				}
+				if (hasAnnotation(annotation.resolveTypeBinding(), className)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	private static boolean hasAnnotation(ITypeBinding typeBinding, String className) {
+		System.out.println(typeBinding.getQualifiedName());
+		return hasAnnotation(typeBinding, className, new HashSet<String>());
+	}
+
+	private static boolean hasAnnotation(ITypeBinding typeBinding, String className,
+			Set<String> seen) {
+		if (!seen.add(typeBinding.getQualifiedName())) {
+			return false;
+		}
+		for (IAnnotationBinding annotationBinding : typeBinding.getAnnotations()) {
+			if (className
+					.equals(annotationBinding.getAnnotationType().getQualifiedName())) {
+				return true;
+			}
+			if (hasAnnotation(annotationBinding.getAnnotationType(), className, seen)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
