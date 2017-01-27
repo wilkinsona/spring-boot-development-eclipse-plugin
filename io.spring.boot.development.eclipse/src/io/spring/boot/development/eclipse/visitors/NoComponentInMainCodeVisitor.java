@@ -40,7 +40,8 @@ class NoComponentInMainCodeVisitor extends ASTVisitor {
 				&& JavaElementUtils.isInSrcMainJava(
 						typeDeclaration.resolveBinding().getJavaElement())
 				&& isComponent(typeDeclaration)) {
-			this.problemReporter.warning(Problem.MAIN_CODE_COMPONENT, typeDeclaration);
+			this.problemReporter.warning(Problem.MAIN_CODE_COMPONENT,
+					typeDeclaration.getName());
 		}
 		return true;
 	}

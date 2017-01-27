@@ -44,7 +44,7 @@ class FailureAnalyzerSpringFactoriesVisitor extends ASTVisitor {
 						.isInSrcMainJava(type.resolveBinding().getJavaElement())
 				&& !isListedInSpringFactories(type)) {
 			this.problemReporter.error(Problem.FAILURE_ANALYZER_NOT_IN_SPRING_FACTORIES,
-					type);
+					type.getName());
 		}
 		return true;
 	}
