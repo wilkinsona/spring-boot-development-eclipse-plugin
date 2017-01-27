@@ -20,7 +20,10 @@ public enum Problem {
 	FAILURE_ANALYZER_NOT_IN_SPRING_FACTORIES(2,
 			"Implements FailureAnalyzer but is not listed in spring.factories"),
 
-	MAIN_CODE_COMPONENT(3, "@Component should not be used in main code");
+	MAIN_CODE_COMPONENT(3, "@Component should not be used in main code"),
+
+	MISSING_FUNCTIONAL_INTERFACE_ANNOTATION(4,
+			"Functional interface is not annotated with @FuntionalInterface");
 
 	private final int id;
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 the original author or authors
+ * Copyright 2016-2017 the original author or authors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -28,7 +28,8 @@ public class AstVisitors implements Iterable<ASTVisitor> {
 				new ConfigurationClassConstructorInjectionVisitor(problemReporter),
 				new FailureAnalyzerSpringFactoriesVisitor(problemReporter,
 						resource.getProject()),
-				new NoComponentInMainCodeVisitor(problemReporter));
+				new NoComponentInMainCodeVisitor(problemReporter),
+				new MissingFunctionalInterfaceVisitor(problemReporter));
 	}
 
 	@Override
