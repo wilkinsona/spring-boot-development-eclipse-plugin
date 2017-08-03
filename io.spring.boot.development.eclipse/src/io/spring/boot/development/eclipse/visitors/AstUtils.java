@@ -14,6 +14,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Annotation;
 import org.eclipse.jdt.core.dom.BodyDeclaration;
 import org.eclipse.jdt.core.dom.IAnnotationBinding;
@@ -113,6 +114,24 @@ public final class AstUtils {
 	 */
 	public static List<String> getImplementedInterfaces(TypeDeclaration type) {
 		return getImplementedInterfaces(type.resolveBinding());
+	}
+
+	/**
+	 * Finds the first ancestor of the given {@node} that is of the given {@code type}.
+	 *
+	 * @param node the node to search from
+	 * @param type the type of node to search for
+	 * @return the first ancestor of the required type or {@code null}
+	 */
+	public static <T extends ASTNode> T findAncestor(ASTNode node, Class<T> type) {
+		ASTNode candidate = node.getParent();
+		while (candidate != null) {
+			if (type.isInstance(candidate)) {
+				return type.cast(candidate);
+			}
+			candidate = candidate.getParent();
+		}
+		return null;
 	}
 
 	private static List<String> getImplementedInterfaces(ITypeBinding type) {

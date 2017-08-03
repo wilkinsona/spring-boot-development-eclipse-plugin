@@ -23,7 +23,10 @@ public enum Problem {
 	MAIN_CODE_COMPONENT(3, "@Component should not be used in main code"),
 
 	MISSING_FUNCTIONAL_INTERFACE_ANNOTATION(4,
-			"Functional interface is not annotated with @FuntionalInterface");
+			"Functional interface is not annotated with @FuntionalInterface"),
+
+	MISSING_PARENTHESES_AROUND_LAMBDA_PARAMETER(5,
+			"Lambda parameter should be enclosed in parentheses");
 
 	private final int id;
 

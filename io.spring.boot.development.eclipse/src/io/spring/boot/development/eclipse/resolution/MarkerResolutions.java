@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 the original author or authors
+ * Copyright 2016-2017 the original author or authors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -23,6 +23,8 @@ public class MarkerResolutions {
 		resolutions = new HashMap<Problem, IMarkerResolution>();
 		resolutions.put(Problem.CONFIGURATION_CLASS_CONSTRUCTOR_INJECTION,
 				new ConfigurationClassConstructorInjectionMarkerResolution());
+		resolutions.put(Problem.MISSING_PARENTHESES_AROUND_LAMBDA_PARAMETER,
+				new LambdaExpressionParameterParenthesesMarkerResolution());
 	}
 
 	public static IMarkerResolution resolutionForProblem(Problem problem) {

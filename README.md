@@ -9,6 +9,9 @@ Eclipse plugin that helps with the development of Spring Boot. Some capabilities
  - Warns about the use of `@Component` in main code
  - Warns about public or protected functional interfaces in main code that are not annotated
    with `@FunctionalInterface`
+ - Warns about single parameter lambda expressions that do not enclose the parameter in
+   parentheses
+ - Quick fix for enclosing a lambda expression's single parameter in parentheses
 
 ### Building
 

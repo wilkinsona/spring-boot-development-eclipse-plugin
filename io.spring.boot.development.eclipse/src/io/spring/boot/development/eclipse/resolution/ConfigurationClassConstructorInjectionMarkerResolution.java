@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 the original author or authors
+ * Copyright 2016-2017 the original author or authors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -13,12 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.spring.boot.development.eclipse.visitors.AstUtils;
-import org.eclipse.core.resources.IMarker;
-import org.eclipse.jdt.core.ICompilationUnit;
-import org.eclipse.jdt.core.JavaCore;
 import org.eclipse.jdt.core.dom.AST;
 import org.eclipse.jdt.core.dom.ASTNode;
-import org.eclipse.jdt.core.dom.ASTParser;
 import org.eclipse.jdt.core.dom.Annotation;
 import org.eclipse.jdt.core.dom.Assignment;
 import org.eclipse.jdt.core.dom.Block;
@@ -30,15 +26,12 @@ import org.eclipse.jdt.core.dom.MemberValuePair;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.Modifier.ModifierKeyword;
-import org.eclipse.jdt.core.dom.NodeFinder;
 import org.eclipse.jdt.core.dom.NormalAnnotation;
 import org.eclipse.jdt.core.dom.ParameterizedType;
 import org.eclipse.jdt.core.dom.SingleVariableDeclaration;
 import org.eclipse.jdt.core.dom.Type;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 import org.eclipse.jdt.core.dom.VariableDeclarationFragment;
-import org.eclipse.jface.text.Document;
-import org.eclipse.text.edits.TextEdit;
 import org.eclipse.ui.IMarkerResolution;
 
 /**
@@ -48,7 +41,7 @@ import org.eclipse.ui.IMarkerResolution;
  * @author Andy Wilkinson
  */
 class ConfigurationClassConstructorInjectionMarkerResolution
-		implements IMarkerResolution {
+		extends CompilationUnitRewritingMarkerResolution {
 
 	@Override
 	public String getLabel() {
@@ -56,43 +49,14 @@ class ConfigurationClassConstructorInjectionMarkerResolution
 	}
 
 	@Override
-	public void run(final IMarker marker) {
-		try {
-			ICompilationUnit sourceUnit = (ICompilationUnit) JavaCore
-					.create(marker.getResource());
-			CompilationUnit compilationUnit = parse(sourceUnit);
-			compilationUnit.recordModifications();
-			int start = (int) marker.getAttribute(IMarker.CHAR_START);
-			ASTNode node = NodeFinder.perform(compilationUnit, start,
-					((int) marker.getAttribute(IMarker.CHAR_END)) - start);
-			convertToConstructorInjection(compilationUnit, findDeclaringType(node));
-			Document document = new Document(sourceUnit.getSource());
-			TextEdit changes = compilationUnit.rewrite(document, null);
-			changes.apply(document);
-			sourceUnit.getBuffer().setContents(document.get());
+	protected boolean resolveMarker(CompilationUnit compilationUnit, ASTNode markedNode) {
+		TypeDeclaration declaringType = AstUtils.findAncestor(markedNode,
+				TypeDeclaration.class);
+		if (declaringType == null) {
+			return false;
 		}
-		catch (Exception ex) {
-			ex.printStackTrace();
-		}
-	}
-
-	private CompilationUnit parse(ICompilationUnit source) {
-		ASTParser parser = ASTParser.newParser(AST.JLS8);
-		parser.setKind(ASTParser.K_COMPILATION_UNIT);
-		parser.setSource(source);
-		parser.setResolveBindings(true);
-		return (CompilationUnit) parser.createAST(null);
-	}
-
-	private TypeDeclaration findDeclaringType(ASTNode node) {
-		ASTNode candidate = node;
-		while (candidate != null) {
-			if (candidate instanceof TypeDeclaration) {
-				return (TypeDeclaration) candidate;
-			}
-			candidate = candidate.getParent();
-		}
-		return null;
+		convertToConstructorInjection(compilationUnit, declaringType);
+		return true;
 	}
 
 	@SuppressWarnings("unchecked")

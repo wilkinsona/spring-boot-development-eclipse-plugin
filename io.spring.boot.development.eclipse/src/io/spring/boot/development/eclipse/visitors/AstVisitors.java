@@ -29,7 +29,8 @@ public class AstVisitors implements Iterable<ASTVisitor> {
 				new FailureAnalyzerSpringFactoriesVisitor(problemReporter,
 						resource.getProject()),
 				new NoComponentInMainCodeVisitor(problemReporter),
-				new MissingFunctionalInterfaceVisitor(problemReporter));
+				new MissingFunctionalInterfaceVisitor(problemReporter),
+				new MissingLambdaParameterParenthesesVisitor(problemReporter));
 	}
 
 	@Override
