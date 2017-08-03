@@ -15,6 +15,7 @@ import io.spring.boot.development.eclipse.Problem;
 import io.spring.boot.development.eclipse.ProblemReporter;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 /**
@@ -39,20 +40,22 @@ class FailureAnalyzerSpringFactoriesVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(TypeDeclaration type) {
-		if (isFailureAnalyzer(type)
-				&& JavaElementUtils
-						.isInSrcMainJava(type.resolveBinding().getJavaElement())
-				&& !isListedInSpringFactories(type)) {
-			this.problemReporter.error(Problem.FAILURE_ANALYZER_NOT_IN_SPRING_FACTORIES,
-					type.getName());
+		if (isFailureAnalyzer(type)) {
+			ITypeBinding binding = type.resolveBinding();
+			if (binding != null
+					&& JavaElementUtils.isInSrcMainJava(binding.getJavaElement())
+					&& !isListedInSpringFactories(binding)) {
+				this.problemReporter.error(
+						Problem.FAILURE_ANALYZER_NOT_IN_SPRING_FACTORIES, type.getName());
+			}
 		}
 		return true;
 	}
 
-	private boolean isListedInSpringFactories(TypeDeclaration type) {
+	private boolean isListedInSpringFactories(ITypeBinding binding) {
 		SpringFactories springFactories = SpringFactories.find(this.project);
 		return springFactories != null && springFactories.get(CLASS_NAME_FAILURE_ANALYZER)
-				.contains(type.resolveBinding().getQualifiedName());
+				.contains(binding.getQualifiedName());
 	}
 
 	private boolean isFailureAnalyzer(TypeDeclaration type) {

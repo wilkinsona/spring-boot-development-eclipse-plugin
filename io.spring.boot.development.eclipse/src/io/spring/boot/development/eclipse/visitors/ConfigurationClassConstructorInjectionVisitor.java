@@ -14,6 +14,7 @@ import io.spring.boot.development.eclipse.ProblemReporter;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.Annotation;
 import org.eclipse.jdt.core.dom.FieldDeclaration;
+import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 /**
@@ -32,7 +33,8 @@ final class ConfigurationClassConstructorInjectionVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(TypeDeclaration type) {
-		if (JavaElementUtils.isInSrcMainJava(type.resolveBinding().getJavaElement())
+		ITypeBinding binding = type.resolveBinding();
+		if (binding != null && JavaElementUtils.isInSrcMainJava(binding.getJavaElement())
 				&& AstUtils.hasAnnotation(type,
 						"org.springframework.context.annotation.Configuration")) {
 			analyzeFields(type.getFields());

@@ -10,6 +10,7 @@
 package io.spring.boot.development.eclipse.visitors;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -113,7 +114,9 @@ public final class AstUtils {
 	 * @return the fully qualified interface names
 	 */
 	public static List<String> getImplementedInterfaces(TypeDeclaration type) {
-		return getImplementedInterfaces(type.resolveBinding());
+		ITypeBinding binding = type.resolveBinding();
+		return binding == null ? Collections.emptyList()
+				: getImplementedInterfaces(binding);
 	}
 
 	/**

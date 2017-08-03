@@ -19,6 +19,7 @@ package io.spring.boot.development.eclipse.visitors;
 import io.spring.boot.development.eclipse.Problem;
 import io.spring.boot.development.eclipse.ProblemReporter;
 import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 /**
@@ -36,9 +37,9 @@ class NoComponentInMainCodeVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(TypeDeclaration typeDeclaration) {
-		if (isInSpringBootPackage(typeDeclaration)
-				&& JavaElementUtils.isInSrcMainJava(
-						typeDeclaration.resolveBinding().getJavaElement())
+		ITypeBinding binding = typeDeclaration.resolveBinding();
+		if (binding != null && isInSpringBootPackage(binding)
+				&& JavaElementUtils.isInSrcMainJava(binding.getJavaElement())
 				&& isComponent(typeDeclaration)) {
 			this.problemReporter.warning(Problem.MAIN_CODE_COMPONENT,
 					typeDeclaration.getName());
@@ -46,9 +47,8 @@ class NoComponentInMainCodeVisitor extends ASTVisitor {
 		return true;
 	}
 
-	private boolean isInSpringBootPackage(TypeDeclaration typeDeclaration) {
-		return typeDeclaration.resolveBinding().getQualifiedName()
-				.startsWith("org.springframework.boot.");
+	private boolean isInSpringBootPackage(ITypeBinding binding) {
+		return binding.getQualifiedName().startsWith("org.springframework.boot.");
 	}
 
 	private boolean isComponent(TypeDeclaration typeDeclaration) {

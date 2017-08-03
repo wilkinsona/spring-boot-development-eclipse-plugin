@@ -19,6 +19,7 @@ package io.spring.boot.development.eclipse.visitors;
 import io.spring.boot.development.eclipse.Problem;
 import io.spring.boot.development.eclipse.ProblemReporter;
 import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.Modifier;
 import org.eclipse.jdt.core.dom.TypeDeclaration;
 
@@ -47,7 +48,9 @@ class MissingFunctionalInterfaceVisitor extends ASTVisitor {
 	}
 
 	private boolean isMainCode(TypeDeclaration type) {
-		return JavaElementUtils.isInSrcMainJava(type.resolveBinding().getJavaElement());
+		ITypeBinding binding = type.resolveBinding();
+		return binding != null
+				&& JavaElementUtils.isInSrcMainJava(binding.getJavaElement());
 	}
 
 	private boolean isPublicOrProtected(TypeDeclaration type) {
@@ -56,8 +59,11 @@ class MissingFunctionalInterfaceVisitor extends ASTVisitor {
 	}
 
 	private boolean isFunctionalInterface(TypeDeclaration type) {
-		return type.isInterface()
-				&& type.resolveBinding().getFunctionalInterfaceMethod() != null;
+		if (!type.isInterface()) {
+			return false;
+		}
+		ITypeBinding binding = type.resolveBinding();
+		return binding != null && binding.getFunctionalInterfaceMethod() != null;
 	}
 
 	private boolean isNotAnnotatedWithFunctionalInterface(TypeDeclaration type) {
