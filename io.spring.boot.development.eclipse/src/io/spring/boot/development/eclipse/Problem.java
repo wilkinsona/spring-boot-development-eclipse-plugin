@@ -26,7 +26,10 @@ public enum Problem {
 			"Functional interface is not annotated with @FuntionalInterface"),
 
 	MISSING_PARENTHESES_AROUND_LAMBDA_PARAMETER(5,
-			"Lambda parameter should be enclosed in parentheses");
+			"Lambda parameter should be enclosed in parentheses"),
+
+	LAMBDA_EXPRESSION_BODY_IS_SINGLE_STATEMENT_BLOCK(6,
+			"Lambda expression with a single statement body does not require a block");
 
 	private final int id;
 

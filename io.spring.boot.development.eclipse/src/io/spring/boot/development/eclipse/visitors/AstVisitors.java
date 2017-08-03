@@ -30,7 +30,8 @@ public class AstVisitors implements Iterable<ASTVisitor> {
 						resource.getProject()),
 				new NoComponentInMainCodeVisitor(problemReporter),
 				new MissingFunctionalInterfaceVisitor(problemReporter),
-				new MissingLambdaParameterParenthesesVisitor(problemReporter));
+				new MissingLambdaParameterParenthesesVisitor(problemReporter),
+				new LambdaExpressionWithUnnecessaryBlockBodyVisitor(problemReporter));
 	}
 
 	@Override
