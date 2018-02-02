@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2017 the original author or authors
+ * Copyright 2016-2018 the original author or authors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -31,7 +31,8 @@ public class AstVisitors implements Iterable<ASTVisitor> {
 				new NoComponentInMainCodeVisitor(problemReporter),
 				new MissingFunctionalInterfaceVisitor(problemReporter),
 				new MissingLambdaParameterParenthesesVisitor(problemReporter),
-				new LambdaExpressionWithUnnecessaryBlockBodyVisitor(problemReporter));
+				new LambdaExpressionWithUnnecessaryBlockBodyVisitor(problemReporter),
+				new UnusedMethodParameterVisitor(problemReporter));
 	}
 
 	@Override

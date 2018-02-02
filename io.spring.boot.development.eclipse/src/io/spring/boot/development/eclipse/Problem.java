@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 the original author or authors
+ * Copyright 2016-2018 the original author or authors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -29,7 +29,9 @@ public enum Problem {
 			"Lambda parameter should be enclosed in parentheses"),
 
 	LAMBDA_EXPRESSION_BODY_IS_SINGLE_STATEMENT_BLOCK(6,
-			"Lambda expression with a single statement body does not require a block");
+			"Lambda expression with a single statement body does not require a block"),
+
+	UNUSED_METHOD_PARAMETER(7, "Method parameter is unused");
 
 	private final int id;
 
