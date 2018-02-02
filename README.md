@@ -13,6 +13,8 @@ Eclipse plugin that helps with the development of Spring Boot. Some capabilities
    parentheses
  - Quick fix for enclosing a lambda expression's single parameter in parentheses
  - Warns about lambda expressions with a block body containing a single statement
+ - Warns about unused method parameters in main code
+ - Reports an error if a usage of AssertJ's `assertThat(…)` is incomplete
 
 ### Building
 
