@@ -31,7 +31,9 @@ public enum Problem {
 	LAMBDA_EXPRESSION_BODY_IS_SINGLE_STATEMENT_BLOCK(6,
 			"Lambda expression with a single statement body does not require a block"),
 
-	UNUSED_METHOD_PARAMETER(7, "Method parameter is unused");
+	UNUSED_METHOD_PARAMETER(7, "Method parameter is unused"),
+
+	INCOMPLETE_USE_OF_ASSERT_THAT(8, "Usage of assertThat is incomplete");
 
 	private final int id;
 
