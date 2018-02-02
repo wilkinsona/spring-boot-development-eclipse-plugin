@@ -47,7 +47,7 @@ class UnusedMethodParameterVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(CompilationUnit compilationUnit) {
-		return AstUtils.isMainCode(compilationUnit);
+		return JavaElementUtils.isInSrcMainJava(compilationUnit.getJavaElement());
 	}
 
 	@Override
@@ -63,7 +63,8 @@ class UnusedMethodParameterVisitor extends ASTVisitor {
 		}
 		SimpleNameVariableBindingCollector collector = new SimpleNameVariableBindingCollector();
 		method.getBody().accept(collector);
-		for (SingleVariableDeclaration parameter : (List<SingleVariableDeclaration>) method.parameters()) {
+		for (SingleVariableDeclaration parameter : (List<SingleVariableDeclaration>) method
+				.parameters()) {
 			IVariableBinding parameterBinding = parameter.resolveBinding();
 			if (!collector.getBindings().contains(parameterBinding)) {
 				this.problemReporter.warning(Problem.UNUSED_METHOD_PARAMETER, parameter);

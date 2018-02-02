@@ -15,12 +15,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.jdt.core.IJavaElement;
-import org.eclipse.jdt.core.IPackageFragmentRoot;
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.Annotation;
 import org.eclipse.jdt.core.dom.BodyDeclaration;
-import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.IAnnotationBinding;
 import org.eclipse.jdt.core.dom.IExtendedModifier;
 import org.eclipse.jdt.core.dom.ITypeBinding;
@@ -162,26 +159,6 @@ public final class AstUtils {
 			return typeBinding.getQualifiedName();
 		}
 		return name.getFullyQualifiedName();
-	}
-
-	/**
-	 * Returns {@code true} if the given {@code compilationUnit} contains main code,
-	 * otherwise {@code false}. Main code is identified by being contained in a package
-	 * fragment root that has a path ending with {@code src/main/java}.
-	 *
-	 * @param compilationUnit the compilation unit
-	 * @return {@code true} if it contains main code, otherwise {@code false}
-	 */
-	public static boolean isMainCode(CompilationUnit compilationUnit) {
-		IJavaElement element = compilationUnit.getJavaElement();
-		while (element != null) {
-			if (element instanceof IPackageFragmentRoot) {
-				return (((IPackageFragmentRoot) element).getPath().toFile()).getPath()
-						.endsWith("src/main/java");
-			}
-			element = element.getParent();
-		}
-		return false;
 	}
 
 }
