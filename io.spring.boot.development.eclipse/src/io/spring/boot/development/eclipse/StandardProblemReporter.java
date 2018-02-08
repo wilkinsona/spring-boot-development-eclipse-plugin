@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 the original author or authors
+ * Copyright 2016-2018 the original author or authors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -24,7 +24,7 @@ public class StandardProblemReporter implements ProblemReporter {
 	public StandardProblemReporter(IResource resource) {
 		this.resource = resource;
 		try {
-			this.resource.deleteMarkers(MARKER_TYPE, true, IResource.DEPTH_INFINITE);
+			this.resource.deleteMarkers(MARKER_TYPE, true, IResource.DEPTH_ZERO);
 		}
 		catch (CoreException ex) {
 			throw new IllegalStateException(ex);
@@ -41,17 +41,32 @@ public class StandardProblemReporter implements ProblemReporter {
 		report(problem, IMarker.SEVERITY_ERROR, node);
 	}
 
+	@Override
+	public void warning(Problem problem) {
+		try {
+			createMarker(problem, IMarker.SEVERITY_WARNING);
+		}
+		catch (CoreException ex) {
+			throw new IllegalStateException(ex);
+		}
+	}
+
+	private IMarker createMarker(Problem problem, int severity) throws CoreException {
+		IMarker marker = this.resource.createMarker(MARKER_TYPE);
+		marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_WARNING);
+		marker.setAttribute(IMarker.MESSAGE, problem.getMessage());
+		marker.setAttribute(IMarker.SOURCE_ID, Integer.toString(problem.getId()));
+		return marker;
+	}
+
 	private void report(Problem problem, int severity, ASTNode node) {
 		try {
-			IMarker marker = this.resource.createMarker(MARKER_TYPE);
-			marker.setAttribute(IMarker.SEVERITY, severity);
-			marker.setAttribute(IMarker.MESSAGE, problem.getMessage());
+			IMarker marker = createMarker(problem, severity);
 			int startPosition = node.getStartPosition();
 			marker.setAttribute(IMarker.CHAR_START, startPosition);
 			marker.setAttribute(IMarker.CHAR_END, startPosition + node.getLength());
 			marker.setAttribute(IMarker.LOCATION,
 					"Line " + getCompilationUnit(node).getLineNumber(startPosition));
-			marker.setAttribute(IMarker.SOURCE_ID, Integer.toString(problem.getId()));
 		}
 		catch (CoreException ex) {
 			throw new IllegalStateException(ex);

@@ -7,7 +7,7 @@
  * http://www.eclipse.org/legal/epl-v10.html
  */
 
-package io.spring.boot.development.eclipse.visitors;
+package io.spring.boot.development.eclipse;
 
 import org.eclipse.jdt.core.IJavaElement;
 import org.eclipse.jdt.core.IPackageFragmentRoot;
@@ -17,7 +17,7 @@ import org.eclipse.jdt.core.IPackageFragmentRoot;
  *
  * @author Andy Wilkinson
  */
-final class JavaElementUtils {
+public final class JavaElementUtils {
 
 	private JavaElementUtils() {
 

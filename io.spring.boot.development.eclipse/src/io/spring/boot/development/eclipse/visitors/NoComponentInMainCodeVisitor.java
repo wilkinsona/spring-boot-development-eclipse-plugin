@@ -9,6 +9,7 @@
 
 package io.spring.boot.development.eclipse.visitors;
 
+import io.spring.boot.development.eclipse.JavaElementUtils;
 import io.spring.boot.development.eclipse.Problem;
 import io.spring.boot.development.eclipse.ProblemReporter;
 import org.eclipse.jdt.core.dom.ASTVisitor;

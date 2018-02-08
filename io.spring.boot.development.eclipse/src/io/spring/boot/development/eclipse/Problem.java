@@ -33,7 +33,9 @@ public enum Problem {
 
 	UNUSED_METHOD_PARAMETER(7, "Method parameter is unused"),
 
-	INCOMPLETE_USE_OF_ASSERT_THAT(8, "Usage of assertThat is incomplete");
+	INCOMPLETE_USE_OF_ASSERT_THAT(8, "Usage of assertThat is incomplete"),
+
+	MISSING_PACKAGE_INFO(9, "Package does not contain a package-info.java file");
 
 	private final int id;
 

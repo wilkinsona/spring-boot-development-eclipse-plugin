@@ -1,5 +1,5 @@
 /*
- * Copyright 2016 the original author or authors
+ * Copyright 2016-2018 the original author or authors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -35,5 +35,13 @@ public interface ProblemReporter {
 	 * @param node the node
 	 */
 	void error(Problem problem, ASTNode node);
+
+	/**
+	 * Reports a warning for the given {@code problem} for the resource targetted by this
+	 * {@code ProblemReporter}.
+	 *
+	 * @param problem the problem
+	 */
+	void warning(Problem problem);
 
 }
