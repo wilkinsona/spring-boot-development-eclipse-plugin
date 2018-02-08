@@ -18,6 +18,7 @@ import io.spring.boot.development.eclipse.ProblemReporter;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.ExpressionStatement;
 import org.eclipse.jdt.core.dom.IMethodBinding;
+import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 
 /**
@@ -60,9 +61,13 @@ public class IncompleteAssertThatVisitor extends ASTVisitor {
 
 	private boolean isAssertThatInvocation(MethodInvocation methodInvocation) {
 		IMethodBinding binding = methodInvocation.resolveMethodBinding();
-		return binding != null
+		if (binding == null) {
+			return false;
+		}
+		ITypeBinding declaringClass = binding.getDeclaringClass();
+		return declaringClass != null
 				&& "org.assertj.core.api.Assertions"
-						.equals(binding.getDeclaringClass().getQualifiedName())
+						.equals(declaringClass.getQualifiedName())
 				&& "assertThat".equals(binding.getName());
 	}
 
