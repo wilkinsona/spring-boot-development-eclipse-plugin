@@ -15,6 +15,8 @@ Eclipse plugin that helps with the development of Spring Boot. Some capabilities
  - Warns about lambda expressions with a block body containing a single statement
  - Warns about unused method parameters in main code
  - Reports an error if a usage of AssertJ's `assertThat(…)` is incomplete
+ - Warns about packages in main code that contain public or protected classes but no
+   `package-info.java` file
 
 ### Building
 

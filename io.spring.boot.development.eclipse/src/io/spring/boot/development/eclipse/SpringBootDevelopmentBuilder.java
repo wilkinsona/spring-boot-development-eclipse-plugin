@@ -9,6 +9,8 @@
 
 package io.spring.boot.development.eclipse;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.resources.IProject;
@@ -29,11 +31,8 @@ public final class SpringBootDevelopmentBuilder extends IncrementalProjectBuilde
 
 	public static final String BUILDER_ID = "io.spring.boot.development.eclipse.builder";
 
-	private final IResourceVisitor resourceVisitor;
-
-	public SpringBootDevelopmentBuilder() {
-		this.resourceVisitor = new JavaSourceCodeAnalyzer();
-	}
+	private final List<IResourceVisitor> resourceVisitors = Arrays
+			.asList(new JavaSourceCodeAnalyzer(), new MissingPackageInfoAnalyzer());
 
 	@Override
 	@SuppressWarnings("rawtypes")
@@ -61,12 +60,17 @@ public final class SpringBootDevelopmentBuilder extends IncrementalProjectBuilde
 	}
 
 	private void fullBuild(IProgressMonitor monitor) throws CoreException {
-		getProject().accept(this.resourceVisitor);
+		IProject project = getProject();
+		for (IResourceVisitor resourceVisitor : this.resourceVisitors) {
+			project.accept(resourceVisitor);
+		}
 	}
 
 	private void incrementalBuild(IResourceDelta delta, IProgressMonitor monitor)
 			throws CoreException {
-		delta.accept(new SpringBootDeltaVisitor(this.resourceVisitor));
+		for (IResourceVisitor resourceVisitor : this.resourceVisitors) {
+			delta.accept(new SpringBootDeltaVisitor(resourceVisitor));
+		}
 	}
 
 }
