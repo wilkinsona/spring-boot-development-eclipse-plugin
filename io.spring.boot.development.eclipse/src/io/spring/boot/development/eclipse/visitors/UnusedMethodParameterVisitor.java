@@ -17,8 +17,10 @@ import io.spring.boot.development.eclipse.JavaElementUtils;
 import io.spring.boot.development.eclipse.Problem;
 import io.spring.boot.development.eclipse.ProblemReporter;
 import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.Annotation;
 import org.eclipse.jdt.core.dom.CompilationUnit;
 import org.eclipse.jdt.core.dom.IBinding;
+import org.eclipse.jdt.core.dom.IExtendedModifier;
 import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.IVariableBinding;
@@ -61,8 +63,39 @@ class UnusedMethodParameterVisitor extends ASTVisitor {
 				.parameters()) {
 			IVariableBinding parameterBinding = parameter.resolveBinding();
 			if (!collector.getBindings().contains(parameterBinding)) {
-				this.problemReporter.warning(Problem.UNUSED_METHOD_PARAMETER, parameter);
+				if (!isThrowable(parameterBinding)
+						&& !isExceptionHandlingMethod(method)) {
+					this.problemReporter.warning(Problem.UNUSED_METHOD_PARAMETER,
+							parameter);
+				}
 			}
+		}
+		return false;
+	}
+
+	@SuppressWarnings("unchecked")
+	private boolean isExceptionHandlingMethod(MethodDeclaration method) {
+		List<IExtendedModifier> extendedModifiers = (List<IExtendedModifier>) method
+				.getStructuralProperty(MethodDeclaration.MODIFIERS2_PROPERTY);
+		for (IExtendedModifier extendedModifier : extendedModifiers) {
+			if (extendedModifier.isAnnotation()) {
+				Annotation annotation = (Annotation) extendedModifier;
+				if ("org.springframework.web.bind.annotation.ExceptionHandler"
+						.equals(annotation.resolveTypeBinding().getQualifiedName())) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	private boolean isThrowable(IVariableBinding variable) {
+		ITypeBinding type = variable.getType();
+		while (type != null) {
+			if ("java.lang.Throwable".equals(type.getQualifiedName())) {
+				return true;
+			}
+			type = type.getSuperclass();
 		}
 		return false;
 	}
