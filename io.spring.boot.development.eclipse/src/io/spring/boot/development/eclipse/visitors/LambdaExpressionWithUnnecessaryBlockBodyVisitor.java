@@ -47,7 +47,7 @@ class LambdaExpressionWithUnnecessaryBlockBodyVisitor extends ASTVisitor {
 				checkSingleStatement((ASTNode) statements.get(0));
 			}
 		}
-		return false;
+		return true;
 	}
 
 	private void checkSingleStatement(ASTNode singleStatement) {

@@ -37,7 +37,7 @@ class MissingLambdaParameterParenthesesVisitor extends ASTVisitor {
 					Problem.MISSING_PARENTHESES_AROUND_LAMBDA_PARAMETER,
 					(ASTNode) lambdaExpression.parameters().get(0));
 		}
-		return false;
+		return true;
 	}
 
 }
