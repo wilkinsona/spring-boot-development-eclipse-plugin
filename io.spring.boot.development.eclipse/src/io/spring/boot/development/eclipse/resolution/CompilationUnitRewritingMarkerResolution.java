@@ -52,7 +52,7 @@ abstract class CompilationUnitRewritingMarkerResolution implements IMarkerResolu
 	}
 
 	private CompilationUnit parse(ICompilationUnit source) {
-		ASTParser parser = ASTParser.newParser(AST.JLS8);
+		ASTParser parser = ASTParser.newParser(AST.JLS10);
 		parser.setKind(ASTParser.K_COMPILATION_UNIT);
 		parser.setSource(source);
 		parser.setResolveBindings(true);
