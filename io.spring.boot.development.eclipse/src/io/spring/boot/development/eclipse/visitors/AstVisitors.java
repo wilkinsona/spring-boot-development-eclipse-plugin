@@ -33,7 +33,8 @@ public class AstVisitors implements Iterable<ASTVisitor> {
 				new MissingLambdaParameterParenthesesVisitor(problemReporter),
 				new LambdaExpressionWithUnnecessaryBlockBodyVisitor(problemReporter),
 				new UnusedMethodParameterVisitor(problemReporter),
-				new IncompleteAssertThatVisitor(problemReporter));
+				new IncompleteAssertThatVisitor(problemReporter),
+				new JavadocLinkToAnnotationValidatingVisitor(problemReporter));
 	}
 
 	@Override

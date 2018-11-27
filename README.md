@@ -17,6 +17,8 @@ Eclipse plugin that helps with the development of Spring Boot. Some capabilities
  - Reports an error if a usage of AssertJ's `assertThat(…)` is incomplete
  - Warns about packages in main code that contain public or protected classes but no
    `package-info.java` file
+ - Warns if a javadoc `@link` to an annotation does not use `@AnnotationName` as the
+   link's text
 
 ### Building
 
