@@ -24,8 +24,9 @@ public interface ProblemReporter {
 	 *
 	 * @param problem the problem
 	 * @param node the node
+	 * @param args arguments to substitute into the problem's message
 	 */
-	void warning(Problem problem, ASTNode node);
+	void warning(Problem problem, ASTNode node, Object... args);
 
 	/**
 	 * Reports an error for the given {@code problem}, associating it with the given
@@ -33,15 +34,17 @@ public interface ProblemReporter {
 	 *
 	 * @param problem the problem
 	 * @param node the node
+	 * @param args arguments to substitute into the problem's message
 	 */
-	void error(Problem problem, ASTNode node);
+	void error(Problem problem, ASTNode node, Object... args);
 
 	/**
 	 * Reports a warning for the given {@code problem} for the resource targetted by this
 	 * {@code ProblemReporter}.
 	 *
 	 * @param problem the problem
+	 * @param args arguments to substitute into the problem's message
 	 */
-	void warning(Problem problem);
+	void warning(Problem problem, Object... args);
 
 }

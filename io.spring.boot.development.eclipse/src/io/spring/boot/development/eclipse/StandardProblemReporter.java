@@ -32,36 +32,37 @@ public class StandardProblemReporter implements ProblemReporter {
 	}
 
 	@Override
-	public void warning(Problem problem, ASTNode node) {
-		report(problem, IMarker.SEVERITY_WARNING, node);
+	public void warning(Problem problem, ASTNode node, Object... args) {
+		report(problem, IMarker.SEVERITY_WARNING, node, args);
 	}
 
 	@Override
-	public void error(Problem problem, ASTNode node) {
-		report(problem, IMarker.SEVERITY_ERROR, node);
+	public void error(Problem problem, ASTNode node, Object... args) {
+		report(problem, IMarker.SEVERITY_ERROR, node, args);
 	}
 
 	@Override
-	public void warning(Problem problem) {
+	public void warning(Problem problem, Object... args) {
 		try {
-			createMarker(problem, IMarker.SEVERITY_WARNING);
+			createMarker(problem, IMarker.SEVERITY_WARNING, args);
 		}
 		catch (CoreException ex) {
 			throw new IllegalStateException(ex);
 		}
 	}
 
-	private IMarker createMarker(Problem problem, int severity) throws CoreException {
+	private IMarker createMarker(Problem problem, int severity, Object... args)
+			throws CoreException {
 		IMarker marker = this.resource.createMarker(MARKER_TYPE);
 		marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_WARNING);
-		marker.setAttribute(IMarker.MESSAGE, problem.getMessage());
+		marker.setAttribute(IMarker.MESSAGE, problem.getMessage(args));
 		marker.setAttribute(IMarker.SOURCE_ID, Integer.toString(problem.getId()));
 		return marker;
 	}
 
-	private void report(Problem problem, int severity, ASTNode node) {
+	private void report(Problem problem, int severity, ASTNode node, Object... args) {
 		try {
-			IMarker marker = createMarker(problem, severity);
+			IMarker marker = createMarker(problem, severity, args);
 			int startPosition = node.getStartPosition();
 			marker.setAttribute(IMarker.CHAR_START, startPosition);
 			marker.setAttribute(IMarker.CHAR_END, startPosition + node.getLength());

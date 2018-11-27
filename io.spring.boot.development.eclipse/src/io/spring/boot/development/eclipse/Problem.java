@@ -35,7 +35,9 @@ public enum Problem {
 
 	INCOMPLETE_USE_OF_ASSERT_THAT(8, "Usage of assertThat is incomplete"),
 
-	MISSING_PACKAGE_INFO(9, "Package does not contain a package-info.java file");
+	MISSING_PACKAGE_INFO(9, "Package does not contain a package-info.java file"),
+
+	INCORRECT_ANNOTATION_LINK(10, "Link to annotation %s should use the text @%s");
 
 	private final int id;
 
@@ -50,8 +52,11 @@ public enum Problem {
 		return this.id;
 	}
 
-	public String getMessage() {
-		return this.message;
+	public String getMessage(Object... args) {
+		if (args.length == 0) {
+			return this.message;
+		}
+		return String.format(this.message, args);
 	}
 
 	public static Problem valueOf(int id) {
