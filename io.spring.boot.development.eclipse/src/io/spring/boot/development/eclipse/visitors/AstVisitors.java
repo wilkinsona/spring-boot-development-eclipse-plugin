@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2018 the original author or authors
+ * Copyright 2016-2019 the original author or authors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -34,7 +34,8 @@ public class AstVisitors implements Iterable<ASTVisitor> {
 				new LambdaExpressionWithUnnecessaryBlockBodyVisitor(problemReporter),
 				new UnusedMethodParameterVisitor(problemReporter),
 				new IncompleteAssertThatVisitor(problemReporter),
-				new JavadocLinkToAnnotationValidatingVisitor(problemReporter));
+				new JavadocLinkToAnnotationValidatingVisitor(problemReporter),
+				new PreferAssertJExceptionAssertionVisitor(problemReporter));
 	}
 
 	@Override

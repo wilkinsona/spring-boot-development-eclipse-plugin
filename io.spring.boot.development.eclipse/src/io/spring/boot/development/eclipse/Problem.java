@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2018 the original author or authors
+ * Copyright 2016-2019 the original author or authors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -37,7 +37,10 @@ public enum Problem {
 
 	MISSING_PACKAGE_INFO(9, "Package does not contain a package-info.java file"),
 
-	INCORRECT_ANNOTATION_LINK(10, "Link to annotation %s should use the text @%s");
+	INCORRECT_ANNOTATION_LINK(10, "Link to annotation %s should use the text @%s"),
+
+	ASSERTJ_EXCEPTION_ASSERTION_SUPPORT_NOT_USED(11,
+			"Use AssertJ's exception assertion support instead");
 
 	private final int id;
 
