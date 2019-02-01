@@ -86,9 +86,9 @@ class JavadocLinkToAnnotationValidatingVisitor extends ASTVisitor {
 	}
 
 	private boolean isAnnotationName(IBinding nameBinding) {
-		return (nameBinding.getKind() == IBinding.ANNOTATION)
+		return nameBinding != null && ((nameBinding.getKind() == IBinding.ANNOTATION)
 				|| ((nameBinding.getKind() == IBinding.TYPE)
-						&& (((ITypeBinding) nameBinding).isAnnotation()));
+						&& (((ITypeBinding) nameBinding).isAnnotation())));
 	}
 
 }
