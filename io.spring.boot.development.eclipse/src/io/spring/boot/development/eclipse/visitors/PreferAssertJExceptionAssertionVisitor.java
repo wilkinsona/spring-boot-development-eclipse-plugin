@@ -17,8 +17,11 @@ import io.spring.boot.development.eclipse.ProblemReporter;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.CatchClause;
 import org.eclipse.jdt.core.dom.IMethodBinding;
+import org.eclipse.jdt.core.dom.ITypeBinding;
+import org.eclipse.jdt.core.dom.MethodDeclaration;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 import org.eclipse.jdt.core.dom.TryStatement;
+import org.eclipse.jdt.core.dom.Type;
 
 /**
  * An {@link ASTVisitor} that recommends the use of AssertJ's exception assert support is
@@ -80,6 +83,20 @@ class PreferAssertJExceptionAssertionVisitor extends ASTVisitor {
 			String declaringClassName, String methodName) {
 		IMethodBinding binding = methodInvocation.resolveMethodBinding();
 		if (binding != null) {
+			MethodDeclaration containingMethod = AstUtils.findAncestor(methodInvocation,
+					MethodDeclaration.class);
+			Type returnType = containingMethod.getReturnType2();
+			if (returnType != null) {
+				ITypeBinding returnTypeBinding = returnType.resolveBinding();
+				if (returnTypeBinding != null) {
+					ITypeBinding exception = returnType.getAST()
+							.resolveWellKnownType("java.lang.Exception");
+					if (exception != null
+							&& exception.isCastCompatible(returnTypeBinding)) {
+						return;
+					}
+				}
+			}
 			IMethodBinding methodDeclaration = binding.getMethodDeclaration();
 			if (methodDeclaration.getDeclaringClass().getQualifiedName()
 					.equals(declaringClassName)
