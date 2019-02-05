@@ -85,6 +85,9 @@ class PreferAssertJExceptionAssertionVisitor extends ASTVisitor {
 		if (binding != null) {
 			MethodDeclaration containingMethod = AstUtils.findAncestor(methodInvocation,
 					MethodDeclaration.class);
+			if (containingMethod == null) {
+				return;
+			}
 			Type returnType = containingMethod.getReturnType2();
 			if (returnType != null) {
 				ITypeBinding returnTypeBinding = returnType.resolveBinding();
