@@ -20,7 +20,7 @@ import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.MethodInvocation;
 
 /**
- * {@link ASTVisitor} that reports an error when for an invocation of an unproxied
+ * {@link ASTVisitor} that reports an error for an invocation of an unproxied
  * {@code @Bean} method.
  *
  * @author Andy Wilkinson
@@ -68,9 +68,16 @@ final class UnproxiedBeanMethodInvocationVisitor extends ASTVisitor {
 	private IAnnotationBinding findConfigurationAnnotation(ITypeBinding typeBinding) {
 		IAnnotationBinding[] annotations = typeBinding.getAnnotations();
 		for (IAnnotationBinding annotation : annotations) {
-			if (CONFIGURATION_ANNOTATION_NAME
-					.equals(annotation.getAnnotationType().getQualifiedName())) {
+			ITypeBinding annotationType = annotation.getAnnotationType();
+			if (CONFIGURATION_ANNOTATION_NAME.equals(annotationType.getQualifiedName())) {
 				return annotation;
+			}
+			if (!annotationType.getQualifiedName().startsWith("java.lang.")) {
+				IAnnotationBinding metaAnnotation = findConfigurationAnnotation(
+						annotationType);
+				if (metaAnnotation != null) {
+					return metaAnnotation;
+				}
 			}
 		}
 		return null;

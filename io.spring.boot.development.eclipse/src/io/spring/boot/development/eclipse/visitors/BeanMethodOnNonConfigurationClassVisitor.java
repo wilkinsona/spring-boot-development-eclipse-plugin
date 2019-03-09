@@ -72,9 +72,16 @@ final class BeanMethodOnNonConfigurationClassVisitor extends ASTVisitor {
 	private IAnnotationBinding findConfigurationAnnotation(ITypeBinding typeBinding) {
 		IAnnotationBinding[] annotations = typeBinding.getAnnotations();
 		for (IAnnotationBinding annotation : annotations) {
-			if (CONFIGURATION_ANNOTATION_NAME
-					.equals(annotation.getAnnotationType().getQualifiedName())) {
+			ITypeBinding annotationType = annotation.getAnnotationType();
+			if (CONFIGURATION_ANNOTATION_NAME.equals(annotationType.getQualifiedName())) {
 				return annotation;
+			}
+			if (!annotationType.getQualifiedName().startsWith("java.lang.")) {
+				IAnnotationBinding metaAnnotation = findConfigurationAnnotation(
+						annotationType);
+				if (metaAnnotation != null) {
+					return metaAnnotation;
+				}
 			}
 		}
 		return null;
