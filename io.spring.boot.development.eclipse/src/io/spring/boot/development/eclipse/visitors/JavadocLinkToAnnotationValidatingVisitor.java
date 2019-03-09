@@ -65,7 +65,7 @@ class JavadocLinkToAnnotationValidatingVisitor extends ASTVisitor {
 				if (isAnnotationName(nameBinding)) {
 					String annotationName = nameBinding.getName();
 					if (!linkTextIsCorrect(fragments, annotationName)) {
-						this.problemReporter.error(Problem.INCORRECT_ANNOTATION_LINK,
+						this.problemReporter.warning(Problem.INCORRECT_ANNOTATION_LINK,
 								link, annotationName, annotationName);
 					}
 				}
