@@ -77,7 +77,8 @@ public final class AstUtils {
 				if (className.equals(findQualifiedTypeName(annotation))) {
 					return true;
 				}
-				if (hasAnnotation(annotation.resolveTypeBinding(), className)) {
+				ITypeBinding typeBinding = annotation.resolveTypeBinding();
+				if (typeBinding != null && hasAnnotation(typeBinding, className)) {
 					return true;
 				}
 			}
