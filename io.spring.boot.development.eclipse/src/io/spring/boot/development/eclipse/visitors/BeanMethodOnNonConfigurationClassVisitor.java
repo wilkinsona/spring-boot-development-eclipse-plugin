@@ -44,10 +44,14 @@ final class BeanMethodOnNonConfigurationClassVisitor extends ASTVisitor {
 		Annotation beanAnnotation = findBeanAnnotation(methodDeclaration);
 		if (beanAnnotation != null) {
 			IMethodBinding binding = methodDeclaration.resolveBinding();
-			if (binding != null
-					&& findConfigurationAnnotation(binding.getDeclaringClass()) == null) {
-				this.problemReporter.warning(
-						Problem.BEAN_METHOD_ON_NON_CONFIGURATION_CLASS, beanAnnotation);
+			if (binding != null) {
+				if (!Modifier.isAbstract(binding.getDeclaringClass().getModifiers())
+						&& findConfigurationAnnotation(
+								binding.getDeclaringClass()) == null) {
+					this.problemReporter.warning(
+							Problem.BEAN_METHOD_ON_NON_CONFIGURATION_CLASS,
+							beanAnnotation);
+				}
 			}
 		}
 		return true;
