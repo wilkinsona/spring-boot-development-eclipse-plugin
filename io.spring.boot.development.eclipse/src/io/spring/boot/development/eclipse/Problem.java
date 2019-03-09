@@ -43,7 +43,10 @@ public enum Problem {
 			"Use AssertJ's exception assertion support instead"),
 
 	INVOCATION_OF_UNPROXIED_BEAN_METHOD(12,
-			"Unproxied @Bean methods must not be invoked directly");
+			"Unproxied @Bean methods must not be invoked directly"),
+
+	BEAN_METHOD_ON_NON_CONFIGURATION_CLASS(13,
+			"@Bean methods should only be declared on @Configuraton classes");
 
 	private final int id;
 
