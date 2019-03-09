@@ -40,7 +40,10 @@ public enum Problem {
 	INCORRECT_ANNOTATION_LINK(10, "Link to annotation %s should use the text @%s"),
 
 	ASSERTJ_EXCEPTION_ASSERTION_SUPPORT_NOT_USED(11,
-			"Use AssertJ's exception assertion support instead");
+			"Use AssertJ's exception assertion support instead"),
+
+	INVOCATION_OF_UNPROXIED_BEAN_METHOD(12,
+			"Unproxied @Bean methods must not be invoked directly");
 
 	private final int id;
 

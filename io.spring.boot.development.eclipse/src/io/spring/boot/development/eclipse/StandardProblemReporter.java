@@ -54,7 +54,7 @@ public class StandardProblemReporter implements ProblemReporter {
 	private IMarker createMarker(Problem problem, int severity, Object... args)
 			throws CoreException {
 		IMarker marker = this.resource.createMarker(MARKER_TYPE);
-		marker.setAttribute(IMarker.SEVERITY, IMarker.SEVERITY_WARNING);
+		marker.setAttribute(IMarker.SEVERITY, severity);
 		marker.setAttribute(IMarker.MESSAGE, problem.getMessage(args));
 		marker.setAttribute(IMarker.SOURCE_ID, Integer.toString(problem.getId()));
 		return marker;

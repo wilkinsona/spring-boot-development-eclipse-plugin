@@ -21,6 +21,7 @@ Eclipse plugin that helps with the development of Spring Boot. Some capabilities
    link's text
  - Warns if fail() is used in a try-block or assertThat() is used in a catch block,
    recommending the use of AssertJ's exception assertion support instead
+ - Reports an error if an unproxied `@Bean` method is called directly
 
 ### Building
 
