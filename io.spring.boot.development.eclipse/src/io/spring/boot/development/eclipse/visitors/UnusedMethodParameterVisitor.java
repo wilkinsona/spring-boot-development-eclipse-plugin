@@ -62,7 +62,8 @@ class UnusedMethodParameterVisitor extends ASTVisitor {
 		for (SingleVariableDeclaration parameter : (List<SingleVariableDeclaration>) method
 				.parameters()) {
 			IVariableBinding parameterBinding = parameter.resolveBinding();
-			if (!collector.getBindings().contains(parameterBinding)) {
+			if (parameterBinding != null
+					&& !collector.getBindings().contains(parameterBinding)) {
 				if (!isThrowable(parameterBinding)
 						&& !isExceptionHandlingMethod(method)) {
 					this.problemReporter.warning(Problem.UNUSED_METHOD_PARAMETER,
