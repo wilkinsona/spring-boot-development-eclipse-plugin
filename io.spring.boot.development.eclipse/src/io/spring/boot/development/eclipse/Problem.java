@@ -46,7 +46,10 @@ public enum Problem {
 			"Unproxied @Bean methods must not be invoked directly"),
 
 	BEAN_METHOD_ON_NON_CONFIGURATION_CLASS(13,
-			"@Bean methods should only be declared on @Configuraton classes");
+			"@Bean methods should only be declared on @Configuraton classes"),
+
+	NON_CONFIGURATION_CLASS_HAS_INHERITED_BEAN_METHODS(14,
+			"Classes that inherit @Bean methods should be annotated with @Configuration");
 
 	private final int id;
 

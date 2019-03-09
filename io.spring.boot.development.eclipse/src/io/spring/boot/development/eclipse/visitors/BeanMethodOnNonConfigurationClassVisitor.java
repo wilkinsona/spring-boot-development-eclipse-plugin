@@ -9,6 +9,7 @@
 
 package io.spring.boot.development.eclipse.visitors;
 
+import java.lang.reflect.Modifier;
 import java.util.List;
 
 import io.spring.boot.development.eclipse.Problem;
@@ -20,6 +21,7 @@ import org.eclipse.jdt.core.dom.IExtendedModifier;
 import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
+import org.eclipse.jdt.core.dom.TypeDeclaration;
 
 /**
  * {@link ASTVisitor} that reports a warning when a {@code @Bean} method is declared on a
@@ -37,6 +39,36 @@ final class BeanMethodOnNonConfigurationClassVisitor extends ASTVisitor {
 
 	BeanMethodOnNonConfigurationClassVisitor(ProblemReporter problemReporter) {
 		this.problemReporter = problemReporter;
+	}
+
+	@Override
+	public boolean visit(TypeDeclaration typeDeclaration) {
+		ITypeBinding binding = typeDeclaration.resolveBinding();
+		if (hasInheritedBeanMethod(binding)
+				&& findConfigurationAnnotation(binding) == null) {
+			this.problemReporter.warning(
+					Problem.NON_CONFIGURATION_CLASS_HAS_INHERITED_BEAN_METHODS,
+					typeDeclaration.getSuperclassType());
+		}
+		return true;
+	}
+
+	private boolean hasInheritedBeanMethod(ITypeBinding binding) {
+		if (binding != null) {
+			while ((binding = binding.getSuperclass()) != null) {
+				IMethodBinding[] methods = binding.getDeclaredMethods();
+				for (IMethodBinding method : methods) {
+					IAnnotationBinding[] annotations = method.getAnnotations();
+					for (IAnnotationBinding annotation : annotations) {
+						if (BEAN_ANNOTATION_NAME.equals(
+								annotation.getAnnotationType().getQualifiedName())) {
+							return true;
+						}
+					}
+				}
+			}
+		}
+		return false;
 	}
 
 	@Override
