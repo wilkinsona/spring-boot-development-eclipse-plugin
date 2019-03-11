@@ -104,7 +104,7 @@ class PreferAssertJExceptionAssertionVisitor extends ASTVisitor {
 			if (methodDeclaration.getDeclaringClass().getQualifiedName()
 					.equals(declaringClassName)
 					&& methodDeclaration.getName().equals(methodName)) {
-				PreferAssertJExceptionAssertionVisitor.this.problemReporter.error(
+				PreferAssertJExceptionAssertionVisitor.this.problemReporter.warning(
 						Problem.ASSERTJ_EXCEPTION_ASSERTION_SUPPORT_NOT_USED,
 						methodInvocation);
 			}
