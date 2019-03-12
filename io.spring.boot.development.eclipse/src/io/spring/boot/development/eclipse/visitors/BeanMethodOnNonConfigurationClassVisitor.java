@@ -10,14 +10,12 @@
 package io.spring.boot.development.eclipse.visitors;
 
 import java.lang.reflect.Modifier;
-import java.util.List;
 
 import io.spring.boot.development.eclipse.Problem;
 import io.spring.boot.development.eclipse.ProblemReporter;
 import org.eclipse.jdt.core.dom.ASTVisitor;
 import org.eclipse.jdt.core.dom.Annotation;
 import org.eclipse.jdt.core.dom.IAnnotationBinding;
-import org.eclipse.jdt.core.dom.IExtendedModifier;
 import org.eclipse.jdt.core.dom.IMethodBinding;
 import org.eclipse.jdt.core.dom.ITypeBinding;
 import org.eclipse.jdt.core.dom.MethodDeclaration;
@@ -44,8 +42,8 @@ final class BeanMethodOnNonConfigurationClassVisitor extends ASTVisitor {
 	@Override
 	public boolean visit(TypeDeclaration typeDeclaration) {
 		ITypeBinding binding = typeDeclaration.resolveBinding();
-		if (hasInheritedBeanMethod(binding)
-				&& findConfigurationAnnotation(binding) == null) {
+		if (hasInheritedBeanMethod(binding) && !AstUtils.hasAnnotation(typeDeclaration,
+				CONFIGURATION_ANNOTATION_NAME)) {
 			this.problemReporter.warning(
 					Problem.NON_CONFIGURATION_CLASS_HAS_INHERITED_BEAN_METHODS,
 					typeDeclaration.getSuperclassType());
@@ -73,13 +71,14 @@ final class BeanMethodOnNonConfigurationClassVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(MethodDeclaration methodDeclaration) {
-		Annotation beanAnnotation = findBeanAnnotation(methodDeclaration);
+		Annotation beanAnnotation = AstUtils.findAnnotation(methodDeclaration,
+				BEAN_ANNOTATION_NAME);
 		if (beanAnnotation != null) {
-			IMethodBinding binding = methodDeclaration.resolveBinding();
-			if (binding != null) {
-				if (!Modifier.isAbstract(binding.getDeclaringClass().getModifiers())
-						&& findConfigurationAnnotation(
-								binding.getDeclaringClass()) == null) {
+			TypeDeclaration typeDeclaration = AstUtils.findAncestor(methodDeclaration,
+					TypeDeclaration.class);
+			if (typeDeclaration != null) {
+				if (!Modifier.isAbstract(typeDeclaration.getModifiers()) && !AstUtils
+						.hasAnnotation(typeDeclaration, CONFIGURATION_ANNOTATION_NAME)) {
 					this.problemReporter.warning(
 							Problem.BEAN_METHOD_ON_NON_CONFIGURATION_CLASS,
 							beanAnnotation);
@@ -87,40 +86,6 @@ final class BeanMethodOnNonConfigurationClassVisitor extends ASTVisitor {
 			}
 		}
 		return true;
-	}
-
-	@SuppressWarnings("unchecked")
-	private Annotation findBeanAnnotation(MethodDeclaration methodDeclaration) {
-		List<IExtendedModifier> modifiers = methodDeclaration.modifiers();
-		for (IExtendedModifier modifier : modifiers) {
-			if (modifier.isAnnotation()) {
-				IAnnotationBinding annotationBinding = ((org.eclipse.jdt.core.dom.Annotation) modifier)
-						.resolveAnnotationBinding();
-				ITypeBinding annotationType = annotationBinding.getAnnotationType();
-				if (BEAN_ANNOTATION_NAME.equals(annotationType.getQualifiedName())) {
-					return (Annotation) modifier;
-				}
-			}
-		}
-		return null;
-	}
-
-	private IAnnotationBinding findConfigurationAnnotation(ITypeBinding typeBinding) {
-		IAnnotationBinding[] annotations = typeBinding.getAnnotations();
-		for (IAnnotationBinding annotation : annotations) {
-			ITypeBinding annotationType = annotation.getAnnotationType();
-			if (CONFIGURATION_ANNOTATION_NAME.equals(annotationType.getQualifiedName())) {
-				return annotation;
-			}
-			if (!annotationType.getQualifiedName().startsWith("java.lang.")) {
-				IAnnotationBinding metaAnnotation = findConfigurationAnnotation(
-						annotationType);
-				if (metaAnnotation != null) {
-					return metaAnnotation;
-				}
-			}
-		}
-		return null;
 	}
 
 }
