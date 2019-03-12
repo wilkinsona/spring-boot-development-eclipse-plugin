@@ -49,7 +49,10 @@ public enum Problem {
 			"@Bean methods should only be declared on @Configuraton classes"),
 
 	NON_CONFIGURATION_CLASS_HAS_INHERITED_BEAN_METHODS(14,
-			"Classes that inherit @Bean methods should be annotated with @Configuration");
+			"Classes that inherit @Bean methods should be annotated with @Configuration"),
+
+	MISMATCHED_BEAN_METHOD_PROXYING(15,
+			"Bean method proxying must be enabled as it is required by a super-class");
 
 	private final int id;
 

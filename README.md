@@ -24,6 +24,8 @@ Eclipse plugin that helps with the development of Spring Boot. Some capabilities
  - Reports an error if an unproxied `@Bean` method is called directly
  - Warns when a `@Bean` method is declared on a non-`@Configuration` class
  - Warns when a non-`@Configuration` class extends a class with `@Bean` methods
+ - Reports an error when a `@Configuration` class that disables bean method proxying
+   extends a `@Configuration` class that uses bean method proxying
 
 ### Building
 
