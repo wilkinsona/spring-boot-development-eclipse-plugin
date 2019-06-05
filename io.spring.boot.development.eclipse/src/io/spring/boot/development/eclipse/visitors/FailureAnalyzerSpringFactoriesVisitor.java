@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2018 the original author or authors
+ * Copyright 2016-2019 the original author or authors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -43,8 +43,7 @@ class FailureAnalyzerSpringFactoriesVisitor extends ASTVisitor {
 	public boolean visit(TypeDeclaration type) {
 		if (isFailureAnalyzer(type)) {
 			ITypeBinding binding = type.resolveBinding();
-			if (binding != null
-					&& JavaElementUtils.isInSrcMainJava(binding.getJavaElement())
+			if (binding != null && JavaElementUtils.isMainCode(binding.getJavaElement())
 					&& !isListedInSpringFactories(binding)) {
 				this.problemReporter.error(
 						Problem.FAILURE_ANALYZER_NOT_IN_SPRING_FACTORIES, type.getName());

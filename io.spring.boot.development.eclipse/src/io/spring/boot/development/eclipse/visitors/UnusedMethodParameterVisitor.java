@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2018 the original author or authors
+ * Copyright 2016-2019 the original author or authors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -43,7 +43,7 @@ class UnusedMethodParameterVisitor extends ASTVisitor {
 
 	@Override
 	public boolean visit(CompilationUnit compilationUnit) {
-		return JavaElementUtils.isInSrcMainJava(compilationUnit.getJavaElement());
+		return JavaElementUtils.isMainCode(compilationUnit.getJavaElement());
 	}
 
 	@Override

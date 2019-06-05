@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2018 the original author or authors
+ * Copyright 2016-2019 the original author or authors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -33,7 +33,7 @@ class NoComponentInMainCodeVisitor extends ASTVisitor {
 	public boolean visit(TypeDeclaration typeDeclaration) {
 		ITypeBinding binding = typeDeclaration.resolveBinding();
 		if (binding != null && isInSpringBootPackage(binding)
-				&& JavaElementUtils.isInSrcMainJava(binding.getJavaElement())
+				&& JavaElementUtils.isMainCode(binding.getJavaElement())
 				&& isComponent(typeDeclaration)) {
 			this.problemReporter.warning(Problem.MAIN_CODE_COMPONENT,
 					typeDeclaration.getName());

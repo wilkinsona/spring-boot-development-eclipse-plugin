@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2018 the original author or authors
+ * Copyright 2016-2019 the original author or authors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -35,7 +35,7 @@ final class ConfigurationClassConstructorInjectionVisitor extends ASTVisitor {
 	@Override
 	public boolean visit(TypeDeclaration type) {
 		ITypeBinding binding = type.resolveBinding();
-		if (binding != null && JavaElementUtils.isInSrcMainJava(binding.getJavaElement())
+		if (binding != null && JavaElementUtils.isMainCode(binding.getJavaElement())
 				&& AstUtils.hasAnnotation(type,
 						"org.springframework.context.annotation.Configuration")) {
 			analyzeFields(type.getFields());

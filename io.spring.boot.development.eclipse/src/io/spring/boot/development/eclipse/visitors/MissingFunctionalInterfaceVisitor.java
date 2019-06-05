@@ -1,5 +1,5 @@
 /*
- * Copyright 2016-2018 the original author or authors
+ * Copyright 2016-2019 the original author or authors
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -43,8 +43,7 @@ class MissingFunctionalInterfaceVisitor extends ASTVisitor {
 
 	private boolean isMainCode(TypeDeclaration type) {
 		ITypeBinding binding = type.resolveBinding();
-		return binding != null
-				&& JavaElementUtils.isInSrcMainJava(binding.getJavaElement());
+		return binding != null && JavaElementUtils.isMainCode(binding.getJavaElement());
 	}
 
 	private boolean isPublicOrProtected(TypeDeclaration type) {
