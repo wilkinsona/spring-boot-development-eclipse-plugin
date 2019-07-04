@@ -45,7 +45,7 @@ class JavaSourceCodeAnalyzer implements IResourceVisitor {
 	}
 
 	private CompilationUnit parse(ICompilationUnit source) {
-		ASTParser parser = ASTParser.newParser(AST.JLS10);
+		ASTParser parser = ASTParser.newParser(AST.JLS11);
 		parser.setKind(ASTParser.K_COMPILATION_UNIT);
 		parser.setSource(source);
 		parser.setResolveBindings(true);
