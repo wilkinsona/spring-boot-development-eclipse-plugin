@@ -26,6 +26,8 @@ Eclipse plugin that helps with the development of Spring Boot. Some capabilities
  - Warns when a non-`@Configuration` class extends a class with `@Bean` methods
  - Reports an error when a `@Configuration` class that disables bean method proxying
    extends a `@Configuration` class that uses bean method proxying
+ - Warns when String.indexOf(String) and String.lastIndexOf(String) are called with a
+   single-character string literal and recommends the use of their char variants instead
 
 ### Building
 

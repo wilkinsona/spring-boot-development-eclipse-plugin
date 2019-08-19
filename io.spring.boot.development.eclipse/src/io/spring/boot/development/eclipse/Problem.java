@@ -52,7 +52,10 @@ public enum Problem {
 			"Classes that inherit @Bean methods should be annotated with @Configuration"),
 
 	MISMATCHED_BEAN_METHOD_PROXYING(15,
-			"Bean method proxying must be enabled as it is required by a super-class");
+			"Bean method proxying must be enabled as it is required by a super-class"),
+
+	SINGLE_CHARACTER_STRING_LITERAL_INDEX_OF(16,
+			"Call to String %s(String) should use %s(char) instead");
 
 	private final int id;
 

@@ -37,7 +37,8 @@ public class AstVisitors implements Iterable<ASTVisitor> {
 				new JavadocLinkToAnnotationValidatingVisitor(problemReporter),
 				new PreferAssertJExceptionAssertionVisitor(problemReporter),
 				new BeanMethodProxyingVisitor(problemReporter),
-				new BeanMethodOnNonConfigurationClassVisitor(problemReporter));
+				new BeanMethodOnNonConfigurationClassVisitor(problemReporter),
+				new StringIndexOfVisitor(problemReporter));
 	}
 
 	@Override
